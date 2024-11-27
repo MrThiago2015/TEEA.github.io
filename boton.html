@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEEA</title>
+  <style>
+    /* General */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f8f8;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    /* Encabezado */
+    header {
+      background-color: #000000;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    /* Barra de navegación */
+    nav {
+      background-color: #000000;
+      padding: 10px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    nav a {
+      color: white;
+      padding: 15px;
+      margin: 0 10px;
+      font-size: 1.1rem;
+      transition: background-color 0.3s;
+    }
+    nav a:hover {
+      background-color: #2980b9;
+    }
+    /* Campo de búsqueda */
+    .search-bar {
+      position: relative;
+    }
+    .search-bar input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .search-bar button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .search-bar button:hover {
+      background-color: #2980b9;
+    }
+    /* Sección de productos */
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .product-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 15px;
+      width: 250px;
+      text-align: center;
+      padding: 15px;
+    }
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .product-card h3 {
+      color: #2c3e50;
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+    .product-card p {
+      color: #7f8c8d;
+      font-size: 1rem;
+    }
+    .price {
+      font-size: 1.3rem;
+      color: #3498db;
+      margin: 15px 0;
+    }
+    .button {
+      background-color: #3498db;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .button:hover {
+      background-color: #2980b9;
+    }
+    /* Pie de página */
+    footer {
+      background-color: #000000;
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    footer p {
+      font-size: 1.75rem;
+      margin: 90;
+    }
+    /* Mensaje de no resultados */
+    .no-results {
+      font-size: 1.2rem;
+      color: red;
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <header>
+    <h1>TEEA</h1>
+  </header>
+
+  <!-- Barra de navegación -->
+  <nav>
+    <a href="/index">Inicio</a>
+    <a href="/index">Productos</a>
+    <a href="/about">Contacto</a>
+    <a href="#">Carrito</a>
+
+    <!-- Buscador -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Buscar productos...">
+      <button type="button" onclick="buscarProductos()">Buscar</button>
+    </div>
+  </nav>
+
+  <!-- Sección de productos -->
+  <div class="product-container" id="productContainer">
+    <div class="product-card" data-name="Producto 1">
+      <img src="https://via.placeholder.com/250" alt="Producto 1">
+      <h3>Producto 1</h3>
+      <p>Descripción del producto 1.</p>
+      <div class="price">$19.99</div>
+      <button class="button">Añadir al carrito</button>
+    </div>
+    <div class="product-card" data-name="Producto 2">
+      <img src="https://via.placeholder.com/250" alt="Producto 2">
+      <h3>Producto 2</h3>
+      <p>Descripción del producto 2.</p>
+      <div class="price">$29.99</div>
+      <button class="button">Añadir al carrito</button>
+    </div>
+    <div class="product-card" data-name="Producto 3">
+      <img src="https://via.placeholder.com/250" alt="Producto 3">
+      <h3>Producto 3</h3>
+      <p>Descripción del producto 3.</p>
+      <div class="price">$39.99</div>
+      <button class="button">Añadir al carrito</button>
+    </div>
+    <!-- Agrega más productos aquí -->
+  </div>
+
+  <!-- Mensaje de no resultados -->
+  <div class="no-results" id="noResultsMessage">No hay resultados para "<span id="searchTerm"></span>"</div>
+
+  <!-- Pie de página -->
+  <footer>
+    <p>&copy; 2024 Tienda Online. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    function buscarProductos() {
+      // Obtiene el término de búsqueda
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+      // Obtiene todos los productos
+      const products = document.querySelectorAll('.product-card');
+
+      // Muestra o oculta productos según el término de búsqueda
+      let found = false;
+      products.forEach(product => {
+        const productName = product.getAttribute('data-name').toLowerCase();
+        if (productName.includes(searchTerm)) {
+          product.style.display = 'block'; // Muestra el producto
+          found = true;
+        } else {
+          product.style.display = 'none'; // Oculta el producto
+        }
+      });
+
+      // Muestra o esconde el mensaje de no resultados
+      const noResultsMessage = document.getElementById('noResultsMessage');
+      const searchTermElement = document.getElementById('searchTerm');
+      searchTermElement.textContent = searchTerm;
+
+      if (!found && searchTerm !== "") {
+        noResultsMessage.style.display = 'block'; // Muestra el mensaje
+      } else {
+        noResultsMessage.style.display = 'none'; // Esconde el mensaje si se encuentran productos
+      }
+    }
+  </script>
+</body>
+</html>
